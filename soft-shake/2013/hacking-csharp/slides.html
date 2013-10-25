@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hacking C# @ SoftShake 2013</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      /* Slideshow styles */
+  @import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+  @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+
+  body {
+	font-family: 'Droid Serif';
+	font-size: 20px;
+  }
+  h1, h2, h3 {
+	font-family: 'Yanone Kaffeesatz';
+	font-weight: 400;
+	margin-bottom: 0;
+  }
+  h1 { font-size: 4em; }
+  h2 { font-size: 2em; }
+  h3 { font-size: 1.6em; }
+  .footnote {
+	position: absolute;
+	bottom: 3em;
+  }
+  li p { line-height: 1.25em; }
+  .red { color: #fa0000; }
+  .large { font-size: 2em; }
+  a, a > code {
+	color: rgb(249, 38, 114);
+	text-decoration: none;
+  }
+  code {
+	-moz-border-radius: 5px;
+	-web-border-radius: 5px;
+	background: #e7e8e2;
+	border-radius: 5px;
+	font-size: 16px;
+  }
+  .pull-left {
+	float: left;
+	width: 47%;
+  }
+  .pull-right {
+	float: right;
+	width: 47%;
+  }
+  .pull-right ~ p {
+	clear: both;
+  }
+  #slideshow .slide .content code {
+	font-size: 0.8em;
+  }
+  #slideshow .slide .content pre code {
+	font-size: 0.9em;
+	padding: 15px;
+  }
+  .inverse {
+	background: #272822;
+	color: #777872;
+	text-shadow: 0 0 20px #333;
+  }
+  .inverse h1, .inverse h2 {
+	color: #f3f3f3;
+	line-height: 0.8em;
+  }
+
+  /* Slide-specific styling */
+  #slide-inverse .footnote {
+	bottom: 12px;
+	left: 20px;
+  }
+  #slide-how .slides {
+	font-size: 0.9em;
+	position: absolute;
+	top:  151px;
+	right: 140px;
+  }
+  #slide-how .slides h3 {
+	margin-top: 0.2em;
+  }
+  #slide-how .slides .first, #slide-how .slides .second {
+	padding: 1px 20px;
+	height: 90px;
+	width: 120px;
+	-moz-box-shadow: 0 0 10px #777;
+	-webkit-box-shadow: 0 0 10px #777;
+	box-shadow: 0 0 10px #777;
+  }
+  #slide-how .slides .first {
+	background: #fff;
+	position: absolute;
+	top: 20%;
+	left: 20%;
+	z-index: 1;
+  }
+  #slide-how .slides .second {
+	position: relative;
+	background: #fff;
+	z-index: 0;
+  }
+
+  /* Two-column layout */
+  .left-column {
+	color: #777;
+	width: 20%;
+	height: 92%;
+	float: left;
+  }
+	.left-column h2:last-of-type, .left-column h3:last-child {
+	  color: #000;
+	}
+  .right-column {
+	width: 75%;
+	float: right;
+	padding-top: 2em;
+  }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+name: inverse
+layout: true
+class: center, middle, inverse
+---
+#c# hacking
+
+##atif aziz
+
+[raboof.com](http://www.raboof.com) ; [@raboof](http://twitter.com/raboof)
+
+.footnote[
+	[presented @ sos 2013](http://soft-shake.ch/2013/program/sessions/13_microsoft/2013/10/25/03-c-sharp-hacks.html)
+]
+---
+layout: false
+.left-column[
+  ## Big Themes
+]
+.right-column[
+
+- Un.red[class]y programming
+
+- Functional first
+
+- When in doubt, be lazy & .red[delegate] decisions
+]
+---
+layout: false
+.left-column[
+  ## Anonymous Coolness
+  
+  ![anonymous](data:image/jpg;base64,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)
+]
+.right-column[
+
+```cs
+var point = new { X = 123, Y = 456 };
+```
+
+- Start simply without OOP overhead
+
+- Free lunch:
+
+  - Equality
+  - Hashing
+  - String formatting
+  - Immutable, so shareable & thread-safe
+
+- Sending anonymous types in & out of functions
+
+- Compiler type inference does most of heavy lifting
+
+- Oh and efficiently implemented with generics
+]
+---
+layout: false
+.left-column[
+  ## LINQ
+]
+.right-column[
+
+```cs
+var q = from i in Enumerable.Range(1, 10)
+        select i * 3 into i
+        where i % 2 == 0
+        select i;
+
+var q = Enumerable.Range(1, 10)
+                  .Select(i => i * 3)
+                  .Where(i => i % 2 == 0);
+```
+
+- Query syntax (.red[prefer]) vs. method chaining
+
+- Not just difference of styles
+
+- Query syntax forces you to *think in expressions* whereas with method chaining
+  can always tempt you into statements
+
+- Try not to mix the two 
+
+  - but not the end of the world either
+]
+---
+name: inverse
+layout: true
+class: center, middle, inverse
+---
+#hammer time
+---
+layout: false
+.left-column[
+## [Eggado](http://eggado.googlecode.com/)
+
+### [goo.gl/jLUiKu](http://goo.gl/jLUiKu)
+]
+.right-column[
+```cs
+var cs = @"Data Source=C:\db\Northwind.sdf";
+using (var connection = new SqlCeConnection(cs))
+using (var command = new SqlCeCommand(@"
+    SELECT 
+        [Product ID] ProductId, 
+        [Product Name] ProductName, 
+        [Quantity Per Unit] QuantityPerUnit, 
+        [Unit Price] UnitPrice
+    FROM     
+        Products", 
+    connection))
+{
+    connection.Open();
+
+    var products = command.Select(
+    (
+        int productId, string productName, 
+        string quantityPerUnit, decimal unitPrice
+    ) 
+    => new 
+    {
+        Id              = productId,
+        Name            = productName,
+        QuantityPerUnit = quantityPerUnit,
+        UnitPrice       = unitPrice,
+    });
+    
+    foreach (var product in products)
+        Console.WriteLine(product);
+}
+```
+]
+---
+layout: false
+.left-column[
+## [Mannex](http://mannex.googlecode.com/)
+
+### Extension methods
+
+### [goo.gl/r8ScUq](http://goo.gl/r8ScUq)
+]
+.right-column[
+Binding regular expressions to lambda
+```cs
+var filename = "FileName-2012-12-31.csv";
+var date = 
+    filename.Match(@"([0-9]{4})-([0-9]{2})-([0-9]{2})")
+            .BindNum((y, m, d) => new DateTime
+            (
+                int.Parse(y.Value),
+                int.Parse(m.Value),
+                int.Parse(d.Value)
+            ));
+Console.WriteLine(date); // 31/12/2012 00:00:00
+```
+Binding string splits to lambda
+```cs
+var filename = "FileName-2012-12-31.csv";
+var date = 
+    filename.Split('-', (_, y, m, dx) => new DateTime
+    (
+        int.Parse(y),
+        int.Parse(m),
+        dx.Split('.', (d, __) => int.Parse(d))
+    ));
+Console.WriteLine(date); // 31/12/2012 00:00:00
+```
+]
+---
+name: inverse
+layout: true
+class: center, middle, inverse
+---
+#thank you
+
+##go safe, go .red[hack] for fun
+
+    </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-0.5.7.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
