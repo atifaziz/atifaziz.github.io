@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>jQuery Highlight plug-in</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.highlight.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".runnable")
+                .attr({ title: "Click to run this script" })
+                .click(function () {
+                    // here be eval!
+                    eval($(this).text());
+                });
+
+            $('h1').highlight('highlight');
+        });
+    </script>
+    <style type="text/css">
+        .highlight, .hi1 { background-color: #ffff00; }
+        .hi2 { background-color: #00ff00; }
+        .hi3 { background-color: #00ffff; }
+        .hi4 { background-color: #ff00ff; }
+        .error { color: red; border-bottom-color: red; border-bottom-width: 1px; border-bottom-style: dashed; }
+        .runnable { cursor: pointer; }
+    </style>
+</head>
+    <body>
+<xmp theme="united" style="display:none;">
+# jQuery Highlight plug-in
+
+It will probably not be a big surprise that jQuery Highlight plug-in can be used to highlight pieces of text on a page. It's based on great [Highlight plug-in](http://johannburkard.de/blog/programming/javascript/highlight-javascript-text-higlighting-jquery-plug-in.html) by [Johann Burkard](http://johannburkard.de) and a [re-factored version](http://bartaz.github.io/sandbox.js/jquery.highlight.html) by [Bartek Szopka](http://www.itsabodybuildingblog.com/). This version adds the ability to highlight multiple words using distict styles.
+
+## <a name="how"></a> How does it work
+
+See the highlighted word in the title of this page? The code shown below was used to do it.
+
+<pre class="prettyprint">$("h1").highlight("highlight");</pre>
+
+Highlight plug-in searches through the text of given elements (`h1` in this case) to find the term (word *highlight* in our example) to highlight. When the term is found it's simply wrapped with a `<span class="highlight">` element (other element and class names can 
+be given as parameters &ndash; [we will discuss it later](#element_and_className)).
+
+Wrapping found terms with elements is all this plug-in does, so to visually highlight them you need to define some CSS rule, for example:
+
+<pre class="prettyprint">
+.highlight {
+    background-color: #FFFF88;
+}
+</pre>
+
+If you don't want to define such rule in CSS, you can do whatever you need with highlighted elements using jQuery. The code below will have the same effect as CSS rule above.
+
+<pre class="prettyprint ">$(".highlight").css({ backgroundColor: "#FFFF88" });</pre>
+
+## <a name="demo"></a> Demo and usage
+
+All the code samples below are runnable. Simply click on them to run the code 
+on this page.
+
+### Basic usage
+
+As we already shown above in [How does it work](#how) section, you can highlight text in any elements simply by running `highlight` function on them. So to highlight word *highlight* in every paragraph of this page run:
+
+<pre class="prettyprint runnable">$("body p").highlight("highlight");</pre>
+
+To remove the highlight within given element run `unhighlight` function, just like this:
+
+<pre class="prettyprint runnable">$("body p").unhighlight();</pre>
+
+Of course with this jQuery highlight plug-in you don't have to limit yourself to short search terms:
+
+<pre class="prettyprint runnable">$("body p").highlight("jQuery highlight plug-in");</pre>
+
+but be aware that this plug-in will only find text that is contained by single element, so if search term will be splitted into more than one node, it won't get highlighted.
+
+You can highlight more than one text at once by running `highlight` with an array of terms as a first attribute. It's much faster than running the `highlight` function several times.
+
+<pre class="prettyprint runnable">$("body p").highlight(["jQuery", "highlight", "plug-in"]);</pre>
+
+### <a name="options"></a> Options
+
+There are several options that can be given as second parameter to change the way `highlight` function behaves.
+
+If you played with examples above you will probably want to un-highlight everything now. Feel free to use this code sample any time you need:
+
+<pre class="prettyprint runnable">$("body p").unhighlight();</pre>
+
+#### <a name="caseSensitive"></a> `caseSensitive`
+
+The option called `caseSensitive` defaults to `false` and controls if the case of the text should be significant during search.
+
+If you don't want to ignore the case of the words, change this value to `true`, 
+like in the example below:
+
+<pre class="prettyprint runnable">$("body p").highlight("Highlight", { caseSensitive: true });</pre>
+
+The code above should highlight only *highlight* words that start with capital letter, like this one: Highlight.
+
+#### <a name="wordsOnly"></a> `wordsOnly`
+
+Option `wordsOnly` can be used to search for whole words (not just pieces of text). It defaults to `false`, so each ocurrence of search term is highlighted.
+
+<p>If you want only to highlight whole words, turn `wordsOnly` option to `true`:
+
+<pre class="prettyprint runnable">
+$("body p").highlight("light", { wordsOnly: true });
+</pre>
+
+The sample above should highlight only the exact 'light' words, not the 'light' text in 'highlight'.
+
+#### <a name="element_and_className"></a> `element`, `className`
+
+You are not limited just to `<span class="highlight">` elements. Element and class names are controlled by options called `element` (defaults to `span`) and `className` (defaults to `highlight`).
+
+If you want to change element and/or class name used while highlighting change the values of `element` and `className` while running highlight:
+
+<pre class="prettyprint runnable">$("body p").highlight("highlight", { element: 'em', className: 'error' });</pre>
+
+Remember that `unhighlight` function removes the highlight based on element and class names, so if you change these options while highlighting you need to pass them also to `unhighlight`:
+
+<pre class="prettyprint runnable">$("body p").unhighlight({ element: 'em', className: 'error' });</pre>
+
+Thanks to jQuery, you can do simply everything with highlighted elements. For example these simple two lines of code below turn each reference to jQuery into a link to jQuery home page:
+
+<pre class="prettyprint runnable">
+$("body p").highlight("jQuery", { element: 'a', className: 'jQueryLink'});
+$("body p a.jQueryLink").attr({ href: 'http://jquery.com' });
+</pre>
+
+`className` can be an array too, which is useful when highlighting multiple words:
+
+<pre class="prettyprint runnable">$("body p").highlight(["jQuery", "highlight", "plug-in"], { className: ['hi1', 'hi2', 'hi3'] });</pre>
+
+Each word will be highlighted with the class name in the corresponding position in the `className` array. If there are more words then the `className` array will recycle:
+
+<pre class="prettyprint runnable">$("body p").highlight(["jQuery", "highlight", "plug-in"], { className: ['hi1', 'hi2'] });</pre>
+
+## <a name="getit"></a> Where to get it?
+
+jQuery Highlight plug-in is licensed under <a href="http://www.opensource.org/licenses/mit-license.php" rel="license">MIT license</a>. The [source code is available on BitBucket](https://bitbucket.org/raboof/jquery.highlight.js).
+</xmp>
+        <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+        <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+        <!-- Derived from http://bartaz.github.io/sandbox.js/jquery.highlight.html -->
+    </body>
+</html>
